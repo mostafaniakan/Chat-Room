@@ -1,0 +1,47 @@
+services:
+  chatroom:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_REVERB_APP_KEY: ${REVERB_APP_KEY:-localreverbkey123456}
+        VITE_REVERB_HOST: ${REVERB_PUBLIC_HOST:-localhost}
+        VITE_REVERB_PORT: ${REVERB_PUBLIC_PORT:-3080}
+        VITE_REVERB_SCHEME: ${REVERB_PUBLIC_SCHEME:-http}
+    container_name: chatroom-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:${PHP_SERVER_PORT:-3000}"
+      - "${REVERB_PUBLIC_PORT:-3080}:${REVERB_SERVER_PORT:-8080}"
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      LOG_CHANNEL: ${LOG_CHANNEL:-stderr}
+      DB_CONNECTION: ${DB_CONNECTION:-sqlite}
+      DB_DATABASE: ${DB_DATABASE:-/var/www/html/storage/app/database.sqlite}
+      BROADCAST_CONNECTION: ${BROADCAST_CONNECTION:-reverb}
+      REVERB_APP_ID: ${REVERB_APP_ID:-123456}
+      REVERB_APP_KEY: ${REVERB_APP_KEY:-localreverbkey123456}
+      REVERB_APP_SECRET: ${REVERB_APP_SECRET:-localreverbsecret1234}
+      REVERB_HOST: ${REVERB_HOST:-127.0.0.1}
+      REVERB_PORT: ${REVERB_PORT:-8080}
+      REVERB_SCHEME: ${REVERB_SCHEME:-http}
+      REVERB_SERVER_HOST: ${REVERB_SERVER_HOST:-0.0.0.0}
+      REVERB_SERVER_PORT: ${REVERB_SERVER_PORT:-8080}
+      REVERB_PUBLIC_HOST: ${REVERB_PUBLIC_HOST:-localhost}
+      REVERB_PUBLIC_PORT: ${REVERB_PUBLIC_PORT:-3080}
+      REVERB_PUBLIC_SCHEME: ${REVERB_PUBLIC_SCHEME:-http}
+      PHP_SERVER_HOST: ${PHP_SERVER_HOST:-0.0.0.0}
+      PHP_SERVER_PORT: ${PHP_SERVER_PORT:-3000}
+      VITE_REVERB_APP_KEY: ${REVERB_APP_KEY:-localreverbkey123456}
+      VITE_REVERB_HOST: ${REVERB_PUBLIC_HOST:-localhost}
+      VITE_REVERB_PORT: ${REVERB_PUBLIC_PORT:-3080}
+      VITE_REVERB_SCHEME: ${REVERB_PUBLIC_SCHEME:-http}
+      MESSAGE_TTL_MINUTES: ${MESSAGE_TTL_MINUTES:-10}
+      VOICE_WIPE_PASSES: ${VOICE_WIPE_PASSES:-1}
+    volumes:
+      - chatroom-storage:/var/www/html/storage
+
+volumes:
+  chatroom-storage:
